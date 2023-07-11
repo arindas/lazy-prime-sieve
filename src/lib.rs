@@ -1,6 +1,10 @@
 pub mod sieve;
 pub mod source;
 
+/// Returns an Iterator of prime numbers.
+///
+/// This function internally invokes a [sieve::GenuineSieve]
+/// with a [source::SpinWheel] source.
 pub fn primes() -> impl Iterator<Item = u64> {
     [2, 3, 5, 7]
         .iter()
