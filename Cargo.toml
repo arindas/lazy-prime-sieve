@@ -5,4 +5,15 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[lib]
+bench = false
+
 [dependencies]
+
+[dev-dependencies]
+criterion = "0.5"
+paste = "1"
+
+[[bench]]
+name = "sieves"
+harness = false

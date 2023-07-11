@@ -3,11 +3,11 @@ use std::{
     slice::Iter,
 };
 
-pub fn integer_candidates() -> impl Iterator<Item = u64> {
+pub fn integer_candidates() -> impl Iterator<Item = u64> + Clone {
     2..
 }
 
-pub fn odds_with_2() -> impl Iterator<Item = u64> {
+pub fn odds_with_2() -> impl Iterator<Item = u64> + Clone {
     std::iter::once(2).chain((3..).step_by(2))
 }
 
