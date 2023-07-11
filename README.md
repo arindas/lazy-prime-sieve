@@ -9,6 +9,12 @@
   <a href="https://codecov.io/gh/arindas/lazy-prime-sieve">
     <img src="https://codecov.io/gh/arindas/lazy-prime-sieve/branch/main/graph/badge.svg?token=MZfko4wvwc"/>
   </a>
+  <a href="https://crates.io/crates/lazy-prime-sieve">
+  <img src="https://img.shields.io/crates/v/lazy-prime-sieve" />
+  </a>
+  <a href="https://github.com/arindas/lazy-prime-sieve/actions/workflows/rustdoc.yml">
+  <img src="https://github.com/arindas/lazy-prime-sieve/actions/workflows/rustdoc.yml/badge.svg" />
+  </a>
 </p>
 
 <p align="center">
