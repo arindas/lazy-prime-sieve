@@ -108,7 +108,7 @@ impl<I> PartialEq for Entry<I> {
 
 impl<I> PartialOrd for Entry<I> {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        self.key.partial_cmp(&other.key)
+        other.key.partial_cmp(&self.key)
     }
 }
 
@@ -116,7 +116,7 @@ impl<I> Eq for Entry<I> {}
 
 impl<I> Ord for Entry<I> {
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
-        self.key.cmp(&other.key)
+        other.key.cmp(&self.key)
     }
 }
 
@@ -137,9 +137,58 @@ impl<I> GenuineSieve<I> {
     }
 }
 
+impl<I> GenuineSieve<I>
+where
+    I: Iterator<Item = u64>,
+{
+    fn adjust_table(&mut self, candidate: u64) -> Option<()> {
+        loop {
+            match self.table.peek() {
+                Some(Entry { key, composites: _ }) if key <= &candidate => {
+                    let entry = self.table.pop()?;
+                    let mut composites = entry.composites;
+                    self.table.push(Entry {
+                        key: composites.next()?,
+                        composites,
+                    });
+                }
+                _ => break,
+            }
+        }
+
+        None
+    }
+}
+
+impl<I> Iterator for GenuineSieve<I>
+where
+    I: Iterator<Item = u64> + Clone,
+{
+    type Item = u64;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        while let Some(candidate) = self.source.next() {
+            match self.table.peek() {
+                Some(Entry {
+                    key: next_composite,
+                    composites: _,
+                }) if next_composite <= &candidate => self.adjust_table(candidate),
+                _ => {
+                    self.table.push(Entry {
+                        key: candidate * candidate,
+                        composites: self.source.clone().multiply(candidate),
+                    });
+                    return Some(candidate);
+                }
+            };
+        }
+        None
+    }
+}
+
 #[cfg(test)]
 pub(crate) mod test {
-    use super::{TrialDivisionSieve, UnfaithfulSieve};
+    use super::{GenuineSieve, TrialDivisionSieve, UnfaithfulSieve};
 
     pub(crate) const PRIMES_100: [u16; 100] = [
         2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89,
@@ -160,6 +209,13 @@ pub(crate) mod test {
     #[test]
     fn test_trial_division_sieve() {
         assert!(TrialDivisionSieve::with_source(2..)
+            .take(100)
+            .eq(PRIMES_100.iter().cloned().map(|x| x as u64)));
+    }
+
+    #[test]
+    fn test_genuine_prime_sieve() {
+        assert!(GenuineSieve::with_source(2..)
             .take(100)
             .eq(PRIMES_100.iter().cloned().map(|x| x as u64)));
     }
