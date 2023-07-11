@@ -1,3 +1,5 @@
+//! Module providing sources of integers to sample primes from.
+
 use std::{
     iter::{Cloned, Cycle},
     slice::Iter,
