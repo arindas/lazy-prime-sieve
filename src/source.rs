@@ -38,7 +38,7 @@ where
         let x = self.wheel.next()?;
         let n_res = self.n;
         self.n = n_res + x;
-        return Some(n_res);
+        Some(n_res)
     }
 }
 
