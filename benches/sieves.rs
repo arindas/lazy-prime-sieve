@@ -57,7 +57,7 @@ macro_rules! bench_group {
 fn bench_sieves(c: &mut Criterion) {
     let mut group = c.benchmark_group("prime-sieves");
 
-    for i in (0..=500_usize).step_by(100) {
+    for i in (0..=10000_usize).step_by(1000) {
         bench_group!(unfaithful_sieve, group, i);
         bench_group!(trial_division_sieve, group, i);
         bench_group!(genuine_sieve, group, i);

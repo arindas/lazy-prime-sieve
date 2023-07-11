@@ -1,7 +1,13 @@
 [package]
 name = "lazy-prime-sieve"
+description = "Lazy Sieve of Eratosthenes for infinitely generating primes lazily in Rust."
+repository = "https://github.com/arindas/lazy-prime-sieve"
+keywords = ["prime-sieve", "sieve-of-eratosthenes"]
+categories = ["algorithms"]
+license = "MIT"
 version = "0.1.0"
 edition = "2021"
+exclude = [".github/", "assets/"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
