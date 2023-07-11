@@ -1,5 +1,14 @@
+//! Module providing sieves for generating primes.
+
 use std::{collections::BinaryHeap, iter, mem};
 
+/// Non-Recursive Rust implementation of the classic Haskell recursive method for generating primes.
+///
+/// This implementation attempts to reproduce the following Haskell code:
+/// ```text
+/// primes = sieve [2..]
+/// sieve (p : xs) = p : sieve [x | x <− xs, x ‘mod‘ p > 0]
+/// ````
 pub struct UnfaithfulSieve {
     source: Box<dyn Iterator<Item = u64>>,
 }
@@ -26,6 +35,7 @@ impl Iterator for UnfaithfulSieve {
     }
 }
 
+/// The modulus based memoized approach of generating primes that we all know and love.
 pub struct TrialDivisionSieve<I> {
     source: I,
     primes: Vec<u64>,
@@ -63,6 +73,7 @@ where
     }
 }
 
+/// Creates an Iterator of integer multiples from the given iterator.
 #[derive(Clone, Copy)]
 pub enum IterMultiple<I> {
     Identity { source: I },
@@ -95,6 +106,7 @@ where
     }
 }
 
+/// Table entry for genuine sieve of eratosthenes.
 pub struct Entry<I> {
     pub key: u64,
     pub composites: IterMultiple<I>,
@@ -120,9 +132,11 @@ impl<I> Ord for Entry<I> {
     }
 }
 
+/// Table for maintaining composites in the genuine prime sieve.
 pub type Table<I> = BinaryHeap<Entry<I>>;
 
-#[allow(unused)]
+/// Genuine Sieve of eratosthenes implementation based on the paper:
+/// [The Genuine Sieve of Eratosthenes](https://www.cs.hmc.edu/~oneill/papers/Sieve-JFP.pdf)
 pub struct GenuineSieve<I> {
     source: IterMultiple<I>,
     table: Table<I>,

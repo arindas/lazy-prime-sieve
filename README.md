@@ -50,8 +50,9 @@ number of primes generated, while the `y-axis` shows the amount of time taken.
 
 This crate heavily draws from the paper [The Genuine Sieve of
 Eratosthenes](https://www.cs.hmc.edu/~oneill/papers/Sieve-JFP.pdf). This
-repository attempts to provide non-recursive lazy iterator based alternatives
-to the proposed lazy recursion based approaches proposed in the paper.
+repository attempts to provide non-recursive lazy Rust iterator based
+alternatives to the proposed Haskell lazy recursion based approaches proposed
+in the paper.
 
 ## License
 
