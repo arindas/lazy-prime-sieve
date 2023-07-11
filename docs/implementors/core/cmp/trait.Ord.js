@@ -1,0 +1,3 @@
+(function() {var implementors = {
+"lazy_prime_sieve":[["impl&lt;I&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/1.70.0/core/cmp/trait.Ord.html\" title=\"trait core::cmp::Ord\">Ord</a> for <a class=\"struct\" href=\"lazy_prime_sieve/sieve/struct.Entry.html\" title=\"struct lazy_prime_sieve::sieve::Entry\">Entry</a>&lt;I&gt;"]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

@@ -1,0 +1,1 @@
+window.ALL_CRATES = ["lazy_prime_sieve"];

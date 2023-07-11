@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["WHEEL_2357_HOLES"],"fn":["integer_candidates","odds_with_2","wheel_2357"],"struct":["SpinWheel"],"type":["Wheel"]};
