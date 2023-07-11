@@ -1,4 +1,4 @@
-use std::{iter, mem};
+use std::{collections::BinaryHeap, iter, mem};
 
 pub struct UnfaithfulSieve {
     source: Box<dyn Iterator<Item = u64>>,
@@ -60,6 +60,80 @@ where
         }
 
         None
+    }
+}
+
+#[derive(Clone, Copy)]
+pub enum IterMultiple<I> {
+    Identity { source: I },
+    Multiple { source: I, factor: u64 },
+}
+
+impl<I> IterMultiple<I> {
+    pub fn multiply(self, factor: u64) -> Self {
+        match self {
+            IterMultiple::Identity { source } => IterMultiple::Multiple { source, factor },
+            IterMultiple::Multiple { source, factor: f } => IterMultiple::Multiple {
+                source,
+                factor: f * factor,
+            },
+        }
+    }
+}
+
+impl<I> Iterator for IterMultiple<I>
+where
+    I: Iterator<Item = u64>,
+{
+    type Item = u64;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        match self {
+            IterMultiple::Identity { source } => source.next(),
+            IterMultiple::Multiple { source, factor: f } => source.next().map(|x| x * *f),
+        }
+    }
+}
+
+pub struct Entry<I> {
+    pub key: u64,
+    pub composites: IterMultiple<I>,
+}
+
+impl<I> PartialEq for Entry<I> {
+    fn eq(&self, other: &Self) -> bool {
+        self.key == other.key
+    }
+}
+
+impl<I> PartialOrd for Entry<I> {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        self.key.partial_cmp(&other.key)
+    }
+}
+
+impl<I> Eq for Entry<I> {}
+
+impl<I> Ord for Entry<I> {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        self.key.cmp(&other.key)
+    }
+}
+
+pub type Table<I> = BinaryHeap<Entry<I>>;
+
+#[allow(unused)]
+pub struct GenuineSieve<I> {
+    source: IterMultiple<I>,
+    table: Table<I>,
+}
+
+impl<I> GenuineSieve<I> {
+    pub fn with_source(source: I) -> Self {
+        Self {
+            source: IterMultiple::Identity { source },
+            table: Table::new(),
+        }
     }
 }
 

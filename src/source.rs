@@ -22,6 +22,7 @@ pub fn wheel_2357() -> Wheel {
     WHEEL_2357_HOLES.iter().cloned().cycle()
 }
 
+#[derive(Clone, Copy)]
 pub struct SpinWheel<I> {
     wheel: I,
     n: u64,
