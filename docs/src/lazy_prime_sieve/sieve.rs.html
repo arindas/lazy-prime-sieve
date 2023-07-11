@@ -220,9 +220,32 @@
 <a href="#220" id="220">220</a>
 <a href="#221" id="221">221</a>
 <a href="#222" id="222">222</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>std::{collections::BinaryHeap, iter, mem};
+<a href="#223" id="223">223</a>
+<a href="#224" id="224">224</a>
+<a href="#225" id="225">225</a>
+<a href="#226" id="226">226</a>
+<a href="#227" id="227">227</a>
+<a href="#228" id="228">228</a>
+<a href="#229" id="229">229</a>
+<a href="#230" id="230">230</a>
+<a href="#231" id="231">231</a>
+<a href="#232" id="232">232</a>
+<a href="#233" id="233">233</a>
+<a href="#234" id="234">234</a>
+<a href="#235" id="235">235</a>
+<a href="#236" id="236">236</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! Module providing sieves for generating primes.
 
-<span class="kw">pub struct </span>UnfaithfulSieve {
+</span><span class="kw">use </span>std::{collections::BinaryHeap, iter, mem};
+
+<span class="doccomment">/// Non-Recursive Rust implementation of the classic Haskell recursive method for generating primes.
+///
+/// This implementation attempts to reproduce the following Haskell code:
+/// ```text
+/// primes = sieve [2..]
+/// sieve (p : xs) = p : sieve [x | x &lt;− xs, x ‘mod‘ p &gt; 0]
+/// ````
+</span><span class="kw">pub struct </span>UnfaithfulSieve {
     source: Box&lt;<span class="kw">dyn </span>Iterator&lt;Item = u64&gt;&gt;,
 }
 
@@ -248,7 +271,8 @@
     }
 }
 
-<span class="kw">pub struct </span>TrialDivisionSieve&lt;I&gt; {
+<span class="doccomment">/// The modulus based memoized approach of generating primes that we all know and love.
+</span><span class="kw">pub struct </span>TrialDivisionSieve&lt;I&gt; {
     source: I,
     primes: Vec&lt;u64&gt;,
 }
@@ -285,7 +309,8 @@
     </span>}
 }
 
-<span class="attr">#[derive(Clone, Copy)]
+<span class="doccomment">/// Creates an Iterator of integer multiples from the given iterator.
+</span><span class="attr">#[derive(Clone, Copy)]
 </span><span class="kw">pub enum </span>IterMultiple&lt;I&gt; {
     Identity { source: I },
     Multiple { source: I, factor: u64 },
@@ -317,7 +342,8 @@
     }
 }
 
-<span class="kw">pub struct </span>Entry&lt;I&gt; {
+<span class="doccomment">/// Table entry for genuine sieve of eratosthenes.
+</span><span class="kw">pub struct </span>Entry&lt;I&gt; {
     <span class="kw">pub </span>key: u64,
     <span class="kw">pub </span>composites: IterMultiple&lt;I&gt;,
 }
@@ -342,9 +368,11 @@
     }
 }
 
-<span class="kw">pub type </span>Table&lt;I&gt; = BinaryHeap&lt;Entry&lt;I&gt;&gt;;
+<span class="doccomment">/// Table for maintaining composites in the genuine prime sieve.
+</span><span class="kw">pub type </span>Table&lt;I&gt; = BinaryHeap&lt;Entry&lt;I&gt;&gt;;
 
-<span class="attr">#[allow(unused)]
+<span class="doccomment">/// Genuine Sieve of eratosthenes implementation based on the paper:
+/// [The Genuine Sieve of Eratosthenes](https://www.cs.hmc.edu/~oneill/papers/Sieve-JFP.pdf)
 </span><span class="kw">pub struct </span>GenuineSieve&lt;I&gt; {
     source: IterMultiple&lt;I&gt;,
     table: Table&lt;I&gt;,

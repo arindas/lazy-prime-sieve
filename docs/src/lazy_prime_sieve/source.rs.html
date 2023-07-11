@@ -76,31 +76,41 @@
 <a href="#76" id="76">76</a>
 <a href="#77" id="77">77</a>
 <a href="#78" id="78">78</a>
+<a href="#79" id="79">79</a>
+<a href="#80" id="80">80</a>
+<a href="#81" id="81">81</a>
+<a href="#82" id="82">82</a>
+<a href="#83" id="83">83</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     iter::{Cloned, Cycle},
     slice::Iter,
 };
 
-<span class="kw">pub fn </span>integer_candidates() -&gt; <span class="kw">impl </span>Iterator&lt;Item = u64&gt; + Clone {
+<span class="doccomment">/// 2..
+</span><span class="kw">pub fn </span>integer_candidates() -&gt; <span class="kw">impl </span>Iterator&lt;Item = u64&gt; + Clone {
     <span class="number">2</span>..
 }
 
-<span class="kw">pub fn </span>odds_with_2() -&gt; <span class="kw">impl </span>Iterator&lt;Item = u64&gt; + Clone {
+<span class="comment">// 2, 3, 5, 7, 9, ...
+</span><span class="kw">pub fn </span>odds_with_2() -&gt; <span class="kw">impl </span>Iterator&lt;Item = u64&gt; + Clone {
     std::iter::once(<span class="number">2</span>).chain((<span class="number">3</span>..).step_by(<span class="number">2</span>))
 }
 
-<span class="kw">pub const </span>WHEEL_2357_HOLES: [u64; <span class="number">48</span>] = [
+<span class="doccomment">/// Wheel holes for generating numbers that are not multiples of (2, 3, 5, 7)
+</span><span class="kw">pub const </span>WHEEL_2357_HOLES: [u64; <span class="number">48</span>] = [
     <span class="number">2</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">2</span>, <span class="number">6</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">6</span>, <span class="number">2</span>, <span class="number">6</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">6</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">8</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">8</span>, <span class="number">6</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>,
     <span class="number">2</span>, <span class="number">6</span>, <span class="number">6</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">2</span>, <span class="number">6</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">10</span>, <span class="number">2</span>, <span class="number">10</span>,
 ];
 
-<span class="kw">pub type </span>Wheel = Cycle&lt;Cloned&lt;Iter&lt;<span class="lifetime">&#39;static</span>, u64&gt;&gt;&gt;;
+<span class="doccomment">/// Wheel mechanism for supporting [SpinWheel]
+</span><span class="kw">pub type </span>Wheel = Cycle&lt;Cloned&lt;Iter&lt;<span class="lifetime">&#39;static</span>, u64&gt;&gt;&gt;;
 
 <span class="kw">pub fn </span>wheel_2357() -&gt; Wheel {
     WHEEL_2357_HOLES.iter().cloned().cycle()
 }
 
-<span class="attr">#[derive(Clone, Copy)]
+<span class="doccomment">/// mechanism for generating numbers that are not multiples of certain factors.
+</span><span class="attr">#[derive(Clone, Copy)]
 </span><span class="kw">pub struct </span>SpinWheel&lt;I&gt; {
     wheel: I,
     n: u64,
