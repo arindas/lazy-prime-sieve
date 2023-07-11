@@ -22,7 +22,7 @@ follows:
 
 ```toml
 [dependencies]
-lazy-prime-sieve = { git = "https://github.com/arindas/lazy-prime-sieve" }
+lazy-prime-sieve = "0.1.0"
 ```
 
 `lazy-prime-sieve` provides iterators for infinitely generating primes. This
