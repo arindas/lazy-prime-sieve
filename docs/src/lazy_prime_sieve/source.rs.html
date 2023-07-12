@@ -83,6 +83,42 @@
 <a href="#83" id="83">83</a>
 <a href="#84" id="84">84</a>
 <a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
+<a href="#87" id="87">87</a>
+<a href="#88" id="88">88</a>
+<a href="#89" id="89">89</a>
+<a href="#90" id="90">90</a>
+<a href="#91" id="91">91</a>
+<a href="#92" id="92">92</a>
+<a href="#93" id="93">93</a>
+<a href="#94" id="94">94</a>
+<a href="#95" id="95">95</a>
+<a href="#96" id="96">96</a>
+<a href="#97" id="97">97</a>
+<a href="#98" id="98">98</a>
+<a href="#99" id="99">99</a>
+<a href="#100" id="100">100</a>
+<a href="#101" id="101">101</a>
+<a href="#102" id="102">102</a>
+<a href="#103" id="103">103</a>
+<a href="#104" id="104">104</a>
+<a href="#105" id="105">105</a>
+<a href="#106" id="106">106</a>
+<a href="#107" id="107">107</a>
+<a href="#108" id="108">108</a>
+<a href="#109" id="109">109</a>
+<a href="#110" id="110">110</a>
+<a href="#111" id="111">111</a>
+<a href="#112" id="112">112</a>
+<a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
+<a href="#116" id="116">116</a>
+<a href="#117" id="117">117</a>
+<a href="#118" id="118">118</a>
+<a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Module providing sources of integers to sample primes from.
 
 </span><span class="kw">use </span>std::{
@@ -90,12 +126,13 @@
     slice::Iter,
 };
 
-<span class="doccomment">/// 2..
+<span class="doccomment">/// Equivalent to: `2..`
 </span><span class="kw">pub fn </span>integer_candidates() -&gt; <span class="kw">impl </span>Iterator&lt;Item = u64&gt; + Clone {
     <span class="number">2</span>..
 }
 
-<span class="comment">// 2, 3, 5, 7, 9, ...
+<span class="doccomment">/// Equivalent to: `once(2).chain((3..).step_by(2))`
+/// The returned iterator yields the sequence 2, 3, 5, 7, 9, ...
 </span><span class="kw">pub fn </span>odds_with_2() -&gt; <span class="kw">impl </span>Iterator&lt;Item = u64&gt; + Clone {
     std::iter::once(<span class="number">2</span>).chain((<span class="number">3</span>..).step_by(<span class="number">2</span>))
 }
@@ -109,11 +146,28 @@
 <span class="doccomment">/// Wheel mechanism for supporting [SpinWheel]
 </span><span class="kw">pub type </span>Wheel = Cycle&lt;Cloned&lt;Iter&lt;<span class="lifetime">&#39;static</span>, u64&gt;&gt;&gt;;
 
-<span class="kw">pub fn </span>wheel_2357() -&gt; Wheel {
+<span class="doccomment">/// Wheel for supporting generation of integers that are not multiples of (2, 3, 5, 7)
+</span><span class="kw">pub fn </span>wheel_2357() -&gt; Wheel {
     WHEEL_2357_HOLES.iter().cloned().cycle()
 }
 
-<span class="doccomment">/// mechanism for generating numbers that are not multiples of certain factors.
+<span class="doccomment">/// Mechanism for generating numbers that are not multiples of certain factors.
+///
+/// ## Usage
+/// ```
+/// use lazy_prime_sieve::{source::SpinWheel, sieve::TrialDivisionSieve};
+///
+/// // starts from 11
+/// let source = SpinWheel::default();
+///
+/// // print the first 10 primes
+/// [2, 3, 5, 7]
+///     .iter()
+///     .cloned()
+///     .chain(TrialDivisionSieve::with_source(source))
+///     .take(10)
+///     .for_each(|x| println!(&quot;{x}&quot;));
+/// ```
 </span><span class="attr">#[derive(Clone, Copy)]
 </span><span class="kw">pub struct </span>SpinWheel&lt;I&gt; {
     wheel: I,
@@ -135,7 +189,25 @@
 }
 
 <span class="kw">impl </span>Default <span class="kw">for </span>SpinWheel&lt;Wheel&gt; {
-    <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
+    <span class="doccomment">/// Source of integers that are not multiples of (2, 3, 5, 7)
+    ///
+    /// This source starts from 11. When using with sieves, use
+    /// this as follows:
+    /// ```
+    /// use lazy_prime_sieve::{source::SpinWheel, sieve::TrialDivisionSieve};
+    ///
+    /// // starts from 11
+    /// let source = SpinWheel::default();
+    ///
+    /// // print the first 10 primes
+    /// [2, 3, 5, 7]
+    ///     .iter()
+    ///     .cloned()
+    ///     .chain(TrialDivisionSieve::with_source(source))
+    ///     .take(10)
+    ///     .for_each(|x| println!(&quot;{x}&quot;));
+    /// ```
+    </span><span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             wheel: wheel_2357(),
             n: <span class="number">11</span>,
