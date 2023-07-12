@@ -5,12 +5,13 @@ use std::{
     slice::Iter,
 };
 
-/// 2..
+/// Equivalent to: `2..`
 pub fn integer_candidates() -> impl Iterator<Item = u64> + Clone {
     2..
 }
 
-// 2, 3, 5, 7, 9, ...
+/// Equivalent to: `once(2).chain((3..).step_by(2))`
+/// The returned iterator yields the sequence 2, 3, 5, 7, 9, ...
 pub fn odds_with_2() -> impl Iterator<Item = u64> + Clone {
     std::iter::once(2).chain((3..).step_by(2))
 }
@@ -24,11 +25,28 @@ pub const WHEEL_2357_HOLES: [u64; 48] = [
 /// Wheel mechanism for supporting [SpinWheel]
 pub type Wheel = Cycle<Cloned<Iter<'static, u64>>>;
 
+/// Wheel for supporting generation of integers that are not multiples of (2, 3, 5, 7)
 pub fn wheel_2357() -> Wheel {
     WHEEL_2357_HOLES.iter().cloned().cycle()
 }
 
-/// mechanism for generating numbers that are not multiples of certain factors.
+/// Mechanism for generating numbers that are not multiples of certain factors.
+///
+/// ## Usage
+/// ```
+/// use lazy_prime_sieve::{source::SpinWheel, sieve::TrialDivisionSieve};
+///
+/// // starts from 11
+/// let source = SpinWheel::default();
+///
+/// // print the first 10 primes
+/// [2, 3, 5, 7]
+///     .iter()
+///     .cloned()
+///     .chain(TrialDivisionSieve::with_source(source))
+///     .take(10)
+///     .for_each(|x| println!("{x}"));
+/// ```
 #[derive(Clone, Copy)]
 pub struct SpinWheel<I> {
     wheel: I,
@@ -50,6 +68,24 @@ where
 }
 
 impl Default for SpinWheel<Wheel> {
+    /// Source of integers that are not multiples of (2, 3, 5, 7)
+    ///
+    /// This source starts from 11. When using with sieves, use
+    /// this as follows:
+    /// ```
+    /// use lazy_prime_sieve::{source::SpinWheel, sieve::TrialDivisionSieve};
+    ///
+    /// // starts from 11
+    /// let source = SpinWheel::default();
+    ///
+    /// // print the first 10 primes
+    /// [2, 3, 5, 7]
+    ///     .iter()
+    ///     .cloned()
+    ///     .chain(TrialDivisionSieve::with_source(source))
+    ///     .take(10)
+    ///     .for_each(|x| println!("{x}"));
+    /// ```
     fn default() -> Self {
         Self {
             wheel: wheel_2357(),

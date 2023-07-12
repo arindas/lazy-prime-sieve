@@ -5,7 +5,7 @@ repository = "https://github.com/arindas/lazy-prime-sieve"
 keywords = ["prime-sieve", "lazy-evaluation"]
 categories = ["algorithms"]
 license = "MIT"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 exclude = [".github/", "assets/"]
 

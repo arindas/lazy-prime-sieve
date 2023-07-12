@@ -9,6 +9,13 @@ use std::{collections::BinaryHeap, iter, mem};
 /// primes = sieve [2..]
 /// sieve (p : xs) = p : sieve [x | x <− xs, x ‘mod‘ p > 0]
 /// ````
+/// ## Usage
+/// ```
+/// use lazy_prime_sieve::sieve::UnfaithfulSieve;
+///
+/// // print the first 10 primes
+/// UnfaithfulSieve::with_source(2..).take(10).for_each(|x| println!("{x}"));
+/// ```
 pub struct UnfaithfulSieve {
     source: Box<dyn Iterator<Item = u64>>,
 }
@@ -36,6 +43,14 @@ impl Iterator for UnfaithfulSieve {
 }
 
 /// The modulus based memoized approach of generating primes that we all know and love.
+///
+/// ## Usage
+/// ```
+/// use lazy_prime_sieve::sieve::TrialDivisionSieve;
+///
+/// // print the first 10 primes
+/// TrialDivisionSieve::with_source(2..).take(10).for_each(|x| println!("{x}"));
+/// ```
 pub struct TrialDivisionSieve<I> {
     source: I,
     primes: Vec<u64>,
@@ -74,6 +89,24 @@ where
 }
 
 /// Creates an Iterator of integer multiples from the given iterator.
+///
+/// The important property of this iterator is that it allows arbitrary nesting of
+/// multiplication invocations without dynamic dispatch and heap allocation.
+/// ```
+/// // dyn dispatch and allocation necessary for in place update
+/// let mut source: Box::<dyn Iterator<Item = u64>> = Box::new(2..); // Box<RangeFrom<u64>>
+/// // Box<Map<RangeFrom<u64>, {closure}>>
+/// source = Box::new(source.map(|x| x * 2));
+/// // Box<Map<Box<Map<RangeFrom<u64>, {closure}>>, {closure}>>
+/// source = Box::new(source.map(|x| x * 3));
+///
+/// use lazy_prime_sieve::sieve::IterMultiple;
+///
+/// // no dyn dispatch, no heap allocation
+/// let mut source = IterMultiple::Identity { source: 2.. };
+/// source = source.multiply(2);
+/// source = source.multiply(3);
+/// ```
 #[derive(Clone, Copy)]
 pub enum IterMultiple<I> {
     Identity { source: I },
@@ -137,6 +170,14 @@ pub type Table<I> = BinaryHeap<Entry<I>>;
 
 /// Genuine Sieve of eratosthenes implementation based on the paper:
 /// [The Genuine Sieve of Eratosthenes](https://www.cs.hmc.edu/~oneill/papers/Sieve-JFP.pdf)
+///
+/// ## Usage
+/// ```
+/// use lazy_prime_sieve::sieve::GenuineSieve;
+///
+/// // print the first 10 primes
+/// GenuineSieve::with_source(2..).take(10).for_each(|x| println!("{x}"));
+/// ```
 pub struct GenuineSieve<I> {
     source: IterMultiple<I>,
     table: Table<I>,
