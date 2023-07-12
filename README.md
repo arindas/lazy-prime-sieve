@@ -46,7 +46,7 @@ for i in primes().take(10) {
 
 ## Design
 
-This crates two kinds of abstractions: `sieve`(s) and `source`(s).
+This crate provides two kinds of abstractions: `sieve`(s) and `source`(s).
 - `source`(s) represent infinite sources of integers from which we sample primes.
 - `sieve`(s) sample primes from `source`(s).
 
