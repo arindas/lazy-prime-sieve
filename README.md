@@ -28,7 +28,7 @@ follows:
 
 ```toml
 [dependencies]
-lazy-prime-sieve = "0.1.0"
+lazy-prime-sieve = "0.1.1"
 ```
 
 `lazy-prime-sieve` provides iterators for infinitely generating primes. This
@@ -46,7 +46,7 @@ for i in primes().take(10) {
 
 ## Benchmarks
 
-![prime-sieves-bench](./assets/lines.svg)
+![prime-sieves-bench](https://raw.githubusercontent.com/arindas/lazy-prime-sieve/main/assets/lines.svg)
 
 This benchmark shows the time taken by the different prime generating iterators
 in this crate to generate a certain number of primes. The `x-axis` shows the
@@ -57,8 +57,8 @@ number of primes generated, while the `y-axis` shows the amount of time taken.
 This crate heavily draws from the paper [The Genuine Sieve of
 Eratosthenes](https://www.cs.hmc.edu/~oneill/papers/Sieve-JFP.pdf). This
 repository attempts to provide non-recursive lazy Rust iterator based
-alternatives to the proposed Haskell lazy recursion based approaches proposed
-in the paper.
+alternatives to the Haskell lazy list + recursion based methods proposed in the
+paper.
 
 ## License
 
