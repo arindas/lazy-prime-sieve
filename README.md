@@ -46,25 +46,25 @@ for i in primes().take(10) {
 
 ## Design
 
-This crate provides two kinds of abstractions: `sieve`(s) and `source`(s).
+This crate provides two types of abstractions: `sieve`(s) and `source`(s).
 - `source`(s) represent infinite sources of integers from which we sample primes.
 - `sieve`(s) sample primes from `source`(s).
 
 Both `source`(s) and `sieve`(s) implement `Iterator<Item = u64>`.
 
 This crate provides the following sieves:
-- `UnfaithfulSieve`: Non recursive `Iterator` based alternative to classic Haskell
+- `UnfaithfulSieve`: Non-recursive `Iterator` based alternative to classic Haskell
 lazy recursive prime sieve:
   ```haskell
   primes = sieve [2..]
   sieve (p : xs) = p : sieve [x | x <− xs, x ‘mod‘ p > 0]
   ```
-- `TrialDivsionSieve`: The modulus based memoized approach of generating primes
+- `TrialDivsionSieve`: The modulus-based memoized approach of generating primes
 that we all know and love.
-- `GenuineSieve`: Priority Queue based solution true to the original Sieve of
+- `GenuineSieve`: Priority Queue based solution, true to the original Sieve of
 Eratosthenes algorithm.
 
-This crate provides the following source:
+This crate provides the following sources:
 - `integer_candidates()`: Returns an iterator which yields the sequence 2, 3, 4, 5, 6, 7, …
 - `odds_with_2()`: Returns an iterator which yields the sequence 2, 3, 5, 7, 9, …
 - `SpinWheel::default()`: Iterator of monotonically increasing integers which are not
@@ -81,7 +81,7 @@ TrialDivisionSieve::with_source(odds_with_2())
   .for_each(|x| println!("{x}"));
 ```
 
-However some sources start from a high number. So we need to chain the initial
+However, some sources start from a high number. So we need to chain the initial
 primes:
 
 ```rust
@@ -109,7 +109,7 @@ details.
 This benchmark shows the time taken by the different `(source, sieve)`
 combinations (fmt: `"{sieve}_with_{source}"`) in this crate to generate a
 certain number of primes. The `x-axis` shows the number of primes generated,
-while the `y-axis` shows the amount of time taken.
+while the `y-axis` shows the time taken.
 
 The fastest combination is `GenuineSieve` with `SpinWheel::default()`. This is
 the combination used by `lazy_prime_sieve::primes()`.
