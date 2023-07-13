@@ -34,7 +34,7 @@ efficient iterator (in this crate) for generating primes.</p>
     <span class="macro">println!</span>(<span class="string">&quot;{i}&quot;</span>);
 }</code></pre></div>
 <h3 id="design"><a href="#design">Design</a></h3>
-<p>This crate provides two kinds of abstractions: <code>sieve</code>(s) and <code>source</code>(s).</p>
+<p>This crate provides two types of abstractions: <code>sieve</code>(s) and <code>source</code>(s).</p>
 <ul>
 <li><code>source</code>(s) represent infinite sources of integers from which we sample primes.</li>
 <li><code>sieve</code>(s) sample primes from <code>source</code>(s).</li>
@@ -42,16 +42,16 @@ efficient iterator (in this crate) for generating primes.</p>
 <p>Both <code>source</code>(s) and <code>sieve</code>(s) implement <code>Iterator&lt;Item = u64&gt;</code>.</p>
 <p>This crate provides the following sieves:</p>
 <ul>
-<li><code>UnfaithfulSieve</code>: Non recursive <code>Iterator</code> based alternative to classic Haskell
+<li><code>UnfaithfulSieve</code>: Non-recursive <code>Iterator</code> based alternative to classic Haskell
 lazy recursive prime sieve:<div class="example-wrap"><pre class="language-haskell"><code>primes = sieve [2..]
 sieve (p : xs) = p : sieve [x | x &lt;− xs, x ‘mod‘ p &gt; 0]
 </code></pre></div></li>
-<li><code>TrialDivsionSieve</code>: The modulus based memoized approach of generating primes
+<li><code>TrialDivsionSieve</code>: The modulus-based memoized approach of generating primes
 that we all know and love.</li>
-<li><code>GenuineSieve</code>: Priority Queue based solution true to the original Sieve of
+<li><code>GenuineSieve</code>: Priority Queue based solution, true to the original Sieve of
 Eratosthenes algorithm.</li>
 </ul>
-<p>This crate provides the following source:</p>
+<p>This crate provides the following sources:</p>
 <ul>
 <li><code>integer_candidates()</code>: Returns an iterator which yields the sequence 2, 3, 4, 5, 6, 7, …</li>
 <li><code>odds_with_2()</code>: Returns an iterator which yields the sequence 2, 3, 5, 7, 9, …</li>
@@ -66,7 +66,7 @@ multiples of 2, 3, 5 and 7.</li>
 </span>TrialDivisionSieve::with_source(odds_with_2())
   .take(<span class="number">10</span>)
   .for_each(|x| <span class="macro">println!</span>(<span class="string">&quot;{x}&quot;</span>));</code></pre></div>
-<p>However some sources start from a high number. So we need to chain the initial
+<p>However, some sources start from a high number. So we need to chain the initial
 primes:</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>lazy_prime_sieve::{source::SpinWheel, sieve::GenuineSieve};
@@ -88,7 +88,7 @@ details.</p>
 <p>This benchmark shows the time taken by the different <code>(source, sieve)</code>
 combinations (fmt: <code>&quot;{sieve}_with_{source}&quot;</code>) in this crate to generate a
 certain number of primes. The <code>x-axis</code> shows the number of primes generated,
-while the <code>y-axis</code> shows the amount of time taken.</p>
+while the <code>y-axis</code> shows the time taken.</p>
 <p>The fastest combination is <code>GenuineSieve</code> with <code>SpinWheel::default()</code>. This is
 the combination used by <code>lazy_prime_sieve::primes()</code>.</p>
 <p>These benchmarks were run on an AMD Ryzen 7 x86_64 machine in WSL with 8 GB RAM
