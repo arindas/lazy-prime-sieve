@@ -114,6 +114,8 @@ while the `y-axis` shows the time taken.
 The fastest combination is `GenuineSieve` with `SpinWheel::default()`. This is
 the combination used by `lazy_prime_sieve::primes()`.
 
+See the generated benchmark report [here](https://arindas.github.io/lazy-prime-sieve/criterion/report/index.html).
+
 These benchmarks were run on an AMD Ryzen 7 x86_64 machine in WSL with 8 GB RAM
 allocated to WSL.
 
