@@ -28,7 +28,7 @@ follows:
 
 ```toml
 [dependencies]
-lazy-prime-sieve = "0.1.2"
+lazy-prime-sieve = "0.1.3"
 ```
 
 `lazy-prime-sieve` provides iterators for infinitely generating primes. This
